@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dépôt des comptes annuels — Guichet unique 2025</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;color:#1a1a1a;background:#f5f4f0;padding:1.5rem}
+.app{max-width:800px;margin:0 auto}
+.banner{background:#E6F1FB;border:1px solid #B5D4F4;border-radius:10px;padding:10px 14px;font-size:13px;color:#0C447C;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
+.stepper{display:flex;margin-bottom:1rem;border:1px solid #ddd;border-radius:10px;overflow:hidden;background:#f5f4f0}
+.step-tab{flex:1;padding:9px 4px;text-align:center;font-size:11px;cursor:pointer;border-right:1px solid #ddd;line-height:1.3;transition:all .15s;color:#888}
+.step-tab:last-child{border-right:none}
+.step-tab.active{background:#fff;color:#1a1a1a;font-weight:500}
+.step-tab.done{color:#1D9E75}
+.step-num{display:block;font-size:10px;opacity:.7;margin-bottom:1px}
+.step-tab.active .step-num{color:#185FA5;opacity:1}
+.step-tab.done .step-num{color:#1D9E75;opacity:1}
+.prog{background:#e8e8e8;border-radius:99px;height:5px;margin-bottom:1.2rem;overflow:hidden}
+.prog-fill{height:100%;background:#185FA5;border-radius:99px;transition:width .3s}
+.panel{background:#fff;border:1px solid #ddd;border-radius:12px;padding:1.5rem}
+h2{font-size:17px;font-weight:500;margin-bottom:4px}
+.sub{font-size:13px;color:#666;margin-bottom:1.4rem;line-height:1.5}
+label{display:block;font-size:12px;color:#666;margin-bottom:4px}
+input,select,textarea{width:100%;border:1px solid #ccc;border-radius:8px;padding:8px 10px;font-size:14px;background:#fff;color:#1a1a1a}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.row.full{grid-template-columns:1fr}
+.fg{margin-bottom:0}
+.sec{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.06em;margin:1.2rem 0 .6rem;padding-bottom:4px;border-bottom:1px solid #eee}
+.alert{padding:9px 13px;border-radius:8px;font-size:13px;margin-bottom:12px;border:1px solid;line-height:1.5}
+.alert.info{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+.alert.warn{background:#FAEEDA;color:#633806;border-color:#FAC775}
+.alert.ok{background:#E1F5EE;color:#085041;border-color:#9FE1CB}
+.alert.red{background:#FCEBEB;color:#791F1F;border-color:#F7C1C1}
+.checklist{display:flex;flex-direction:column;gap:8px}
+.ci{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #ddd;border-radius:8px;cursor:pointer;transition:all .15s}
+.ci:hover{background:#f9f9f9}
+.ci.on{border-color:#1D9E75;background:#E1F5EE}
+.cb{width:17px;height:17px;border:1.5px solid #ccc;border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;background:#fff}
+.ci.on .cb{background:#1D9E75;border-color:#1D9E75}
+.cl{font-size:14px;line-height:1.4}
+.cd{font-size:12px;color:#888;margin-top:2px}
+.tag{padding:2px 7px;border-radius:99px;font-size:11px;font-weight:500}
+.tg{background:#E1F5EE;color:#085041}
+.ta{background:#FAEEDA;color:#633806}
+.actions{display:flex;gap:10px;margin-top:1.5rem;justify-content:space-between;align-items:center}
+.btn{padding:8px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid #ccc;background:#fff;color:#1a1a1a;transition:all .15s}
+.btn:hover{background:#f5f4f0}
+.btn.p{background:#185FA5;color:#E6F1FB;border-color:#185FA5}
+.btn.p:hover{background:#0C447C}
+.btn.g{background:#0F6E56;color:#E1F5EE;border-color:#0F6E56}
+.btn.g:hover{background:#085041}
+.gen-out{background:#f5f4f0;border-radius:8px;padding:.9rem 1rem;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:monospace;margin-top:.7rem;max-height:260px;overflow-y:auto;border:1px solid #ddd}
+.copy-row{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;margin-bottom:.3rem}
+.tl-item{display:flex;gap:14px;position:relative}
+.tl-line{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.tl-dot.blue{background:#E6F1FB;color:#185FA5;border:1.5px solid #B5D4F4}
+.tl-dot.green{background:#E1F5EE;color:#0F6E56;border:1.5px solid #9FE1CB}
+.tl-connector{width:1px;background:#ddd;flex:1;min-height:16px}
+.tl-content{padding-bottom:18px;flex:1}
+.tl-title{font-size:14px;font-weight:500;margin-bottom:2px}
+.tl-desc{font-size:12px;color:#666;line-height:1.5}
+.tl-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;margin-top:4px;background:#E6F1FB;color:#185FA5}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.sc{background:#f5f4f0;border-radius:8px;padding:10px 12px}
+.sc .lbl{font-size:11px;color:#888;margin-bottom:3px}
+.sc .val{font-size:14px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="banner">
+    <span style="font-size:16px">!</span>
+    <span>Depuis le 1er janvier 2025 — dépôt exclusivement sur le <strong>Guichet unique INPI</strong> (formalites.entreprises.gouv.fr)</span>
+  </div>
+  <div class="prog"><div class="prog-fill" id="prog" style="width:17%"></div></div>
+  <div class="stepper" id="stepper">
+    <div class="step-tab active" onclick="goto(0)"><span class="step-num">01</span>Société</div>
+    <div class="step-tab" onclick="goto(1)"><span class="step-num">02</span>Exercice</div>
+    <div class="step-tab" onclick="goto(2)"><span class="step-num">03</span>Documents</div>
+    <div class="step-tab" onclick="goto(3)"><span class="step-num">04</span>Confidentialité</div>
+    <div class="step-tab" onclick="goto(4)"><span class="step-num">05</span>Déclaration</div>
+    <div class="step-tab" onclick="goto(5)"><span class="step-num">06</span>Dépôt en ligne</div>
+  </div>
+  <div class="panel" id="main"></div>
+</div>
+
+<script>
+const S={step:0,soc:{nom:'',siren:'',forme:'SAS',siege:'',capital:'',dirigeant:'',qualite:'Présidente',associe_unique:false},ex:{debut:'',fin:'',ca:'',bilan:'',salaries:''},docs:{bilan:false,cr:false,annexe:false,rapport_gestion:false,pv:false,cac:false},conf:{demande_bilan:false,demande_cr:false},decl_text:''};
+const PROG=[17,33,50,67,83,100];
+function goto(n){S.step=n;render();}
+function next(){if(S.step<5){S.step++;render();}}
+function prev(){if(S.step>0){S.step--;render();}}
+function isSmall(){const ca=parseFloat(S.ex.ca)||0,bl=parseFloat(S.ex.bilan)||0,sal=parseInt(S.ex.salaries)||0;return(ca<8000000?1:0)+(bl<4000000?1:0)+(sal<50?1:0)>=2;}
+function isMicro(){const ca=parseFloat(S.ex.ca)||0,bl=parseFloat(S.ex.bilan)||0,sal=parseInt(S.ex.salaries)||0;return(ca<700000?1:0)+(bl<350000?1:0)+(sal<10?1:0)>=2;}
+function fmt(d){return d?new Date(d).toLocaleDateString('fr-FR'):'[DATE]';}
+function delai(fin){const d=new Date(fin);d.setMonth(d.getMonth()+8);return d.toLocaleDateString('fr-FR');}
+
+function render(){
+  document.getElementById('prog').style.width=PROG[S.step]+'%';
+  document.querySelectorAll('.step-tab').forEach((t,i)=>{t.className='step-tab'+(i===S.step?' active':i<S.step?' done':'');});
+  const fns=[s0,s1,s2,s3,s4,s5];
+  document.getElementById('main').innerHTML=fns[S.step]();
+}
+
+function s0(){const s=S.soc;return`<h2>Identification de la société</h2><p class="sub">Données de votre extrait K-bis — nécessaires pour pré-remplir la déclaration.</p><div class="row"><div class="fg"><label>Dénomination sociale</label><input value="${s.nom}" oninput="S.soc.nom=this.value" placeholder="ex: Montclar SAS"></div><div class="fg"><label>Numéro SIREN</label><input value="${s.siren}" oninput="S.soc.siren=this.value" placeholder="9 chiffres" maxlength="9"></div></div><div class="row"><div class="fg"><label>Forme juridique</label><select onchange="S.soc.forme=this.value"><option ${s.forme==='SAS'?'selected':''}>SAS</option><option ${s.forme==='SASU'?'selected':''}>SASU</option><option ${s.forme==='SARL'?'selected':''}>SARL</option><option ${s.forme==='EURL'?'selected':''}>EURL</option><option ${s.forme==='SA'?'selected':''}>SA</option><option ${s.forme==='SCI'?'selected':''}>SCI</option></select></div><div class="fg"><label>Capital social (€)</label><input value="${s.capital}" oninput="S.soc.capital=this.value" placeholder="ex: 10 000"></div></div><div class="row full"><div class="fg"><label>Siège social</label><input value="${s.siege}" oninput="S.soc.siege=this.value" placeholder="ex: 6 rue Fonderie Vieille, 13002 Marseille"></div></div><div class="row"><div class="fg"><label>Représentant légal</label><input value="${s.dirigeant}" oninput="S.soc.dirigeant=this.value" placeholder="Prénom NOM"></div><div class="fg"><label>Qualité</label><select onchange="S.soc.qualite=this.value"><option ${s.qualite==='Président'?'selected':''}>Président</option><option ${s.qualite==='Présidente'?'selected':''}>Présidente</option><option ${s.qualite==='Gérant'?'selected':''}>Gérant</option><option ${s.qualite==='Gérante'?'selected':''}>Gérante</option></select></div></div><div class="ci ${s.associe_unique?'on':''}" onclick="S.soc.associe_unique=!S.soc.associe_unique;render()" style="margin-top:4px"><div class="cb">${s.associe_unique?'✓':''}</div><div><div class="cl">Associé unique également dirigeant (SASU/EURL)</div><div class="cd">Le dépôt des comptes vaut approbation — aucun PV d'AGO requis.</div></div></div><div class="actions"><span></span><button class="btn p" onclick="next()">Étape suivante →</button></div>`;}
+
+function s1Alerts(){const e=S.ex;return(isMicro()?'<div class="alert ok">Micro-entreprise détectée — confidentialité totale des comptes possible (L.232-25).</div>':isSmall()?'<div class="alert ok">Petite entreprise détectée — confidentialité du compte de résultat possible (L.232-25).</div>':'<div class="alert info">Entreprise standard — pas de confidentialité applicable.</div>')+(e.fin?`<div class="alert info">Date limite de dépôt en ligne (estimée) : <strong>${delai(e.fin)}</strong></div>`:'');}
+function s1UpdateAlerts(){const el=document.getElementById('s1alerts');if(el)el.innerHTML=s1Alerts();}
+function s1(){const e=S.ex;return`<h2>Exercice comptable</h2><p class="sub">Ces données permettent de déterminer vos obligations et droits à la confidentialité.</p><div class="row"><div class="fg"><label>Début de l'exercice</label><input type="date" value="${e.debut}" onchange="S.ex.debut=this.value;s1UpdateAlerts()"></div><div class="fg"><label>Clôture de l'exercice</label><input type="date" value="${e.fin}" onchange="S.ex.fin=this.value;s1UpdateAlerts()"></div></div><div class="sec">Seuils (2 critères sur 3 suffisent)</div><div class="row"><div class="fg"><label>Chiffre d'affaires HT (€)</label><input value="${e.ca}" oninput="S.ex.ca=this.value;s1UpdateAlerts()" placeholder="Montant annuel"></div><div class="fg"><label>Total bilan (€)</label><input value="${e.bilan}" oninput="S.ex.bilan=this.value;s1UpdateAlerts()" placeholder="Total actif"></div></div><div class="row"><div class="fg"><label>Nombre moyen de salariés</label><input value="${e.salaries}" oninput="S.ex.salaries=this.value;s1UpdateAlerts()" placeholder="ETP"></div></div><div id="s1alerts">${s1Alerts()}</div><div class="actions"><button class="btn" onclick="prev()">← Retour</button><button class="btn p" onclick="next()">Étape suivante →</button></div>`;}
+
+function s2(){const d=S.docs,su=S.soc.associe_unique;const items=[{k:'bilan',l:'Bilan et compte de résultat',desc:'Format PDF ou XML XBRL. Pièce obligatoire.',req:true},{k:'annexe',l:'Annexe comptable',desc:isMicro()?'Facultatif pour micro-entreprise (sauf option).':'Obligatoire sauf micro-entreprise.',req:!isMicro()},{k:'rapport_gestion',l:'Rapport de gestion',desc:'Obligatoire si 2 seuils dépassés sur 3. Peut être intégré aux comptes.',req:!isSmall()},{k:'pv',l:"PV d'assemblée générale ordinaire",desc:su?"Non requis — associé unique = dirigeant.":"Contient la résolution d'affectation du résultat.",req:!su},{k:'cac',l:'Rapport du commissaire aux comptes',desc:'Uniquement si CAC nommé dans les statuts.',req:false}];return`<h2>Documents à préparer</h2><p class="sub">Préparez vos fichiers PDF (ou XML XBRL pour le bilan). Cochez les pièces disponibles.</p><div class="checklist">${items.map(it=>`<div class="ci ${d[it.k]?'on':''}" onclick="S.docs.${it.k}=!S.docs.${it.k};render()"><div class="cb">${d[it.k]?'✓':''}</div><div><div class="cl">${it.l} <span class="tag ${it.req?'tg':'ta'}">${it.req?'Obligatoire':'Selon cas'}</span></div><div class="cd">${it.desc}</div></div></div>`).join('')}</div>${!d.bilan?'<div class="alert warn" style="margin-top:12px">Le bilan est la pièce principale — indispensable pour le dépôt.</div>':''}<div class="actions"><button class="btn" onclick="prev()">← Retour</button><button class="btn p" onclick="next()">Étape suivante →</button></div>`;}
+
+function s3(){const sm=isSmall(),mc=isMicro(),c=S.conf;if(!sm&&!mc)return`<h2>Confidentialité</h2><p class="sub">Option non disponible pour votre société.</p><div class="alert info">La confidentialité est réservée aux petites entreprises (2 critères sur 3 : ≤8M€ CA, ≤4M€ bilan, ≤50 sal.). Renseignez vos seuils à l'étape 2.</div><div class="actions"><button class="btn" onclick="prev()">← Retour</button><button class="btn p" onclick="next()">Étape suivante →</button></div>`;return`<h2>Option de confidentialité</h2><p class="sub">Art. L.232-25 C.com — déclaration séparée à joindre au dossier sur le Guichet unique.</p>${mc?'<div class="alert ok">Micro-entreprise : confidentialité totale possible (bilan + compte de résultat).</div>':'<div class="alert ok">Petite entreprise : confidentialité du compte de résultat uniquement.</div>'}<div class="checklist" style="margin-top:12px">${mc?`<div class="ci ${c.demande_bilan?'on':''}" onclick="S.conf.demande_bilan=!S.conf.demande_bilan;render()"><div class="cb">${c.demande_bilan?'✓':''}</div><div><div class="cl">Confidentialité totale du bilan</div><div class="cd">Bilan non accessible au public — modèle A.123-61-1 C.com.</div></div></div>`:''}<div class="ci ${c.demande_cr?'on':''}" onclick="S.conf.demande_cr=!S.conf.demande_cr;render()"><div class="cb">${c.demande_cr?'✓':''}</div><div><div class="cl">Confidentialité du compte de résultat</div><div class="cd">CR non publié au BODACC — déclaration distincte à uploader.</div></div></div></div><div class="alert info" style="margin-top:12px">Un modèle officiel de déclaration de confidentialité est téléchargeable sur infogreffe.fr (rubrique "Formulaires").</div><div class="actions"><button class="btn" onclick="prev()">← Retour</button><button class="btn p" onclick="next()">Générer la déclaration →</button></div>`;}
+
+function s4(){const s=S.soc,e=S.ex,c=S.conf;const today=new Date().toLocaleDateString('fr-FR');const dl=[S.docs.bilan?'- Bilan et compte de résultat':'',S.docs.annexe?'- Annexe comptable':'',S.docs.rapport_gestion?'- Rapport de gestion':'',S.docs.pv?"- Procès-verbal d'AGO":'',S.docs.cac?'- Rapport du commissaire aux comptes':'',c.demande_bilan?'- Déclaration de confidentialité totale':'',c.demande_cr?'- Déclaration de confidentialité CR':''].filter(Boolean).join('\n');const text=`DÉPÔT DES COMPTES ANNUELS — RÉCAPITULATIF\n────────────────────────────────────────────\nSociété      : ${s.nom||'[DÉNOMINATION]'}\nSIREN        : ${s.siren||'[SIREN]'}\nForme        : ${s.forme}\nSiège        : ${s.siege||'[SIÈGE]'}\nCapital      : ${s.capital?s.capital+' €':'[CAPITAL]'}\n\nExercice     : du ${fmt(e.debut)} au ${fmt(e.fin)}\n${e.ca?'CA HT        : '+Number(e.ca).toLocaleString('fr-FR')+' €\n':''}${e.bilan?'Total bilan  : '+Number(e.bilan).toLocaleString('fr-FR')+' €\n':''}\nCatégorie    : ${isMicro()?'Micro-entreprise':isSmall()?'Petite entreprise':'Entreprise standard'}\nConfidentialité : ${c.demande_bilan?'Totale (bilan + CR)':c.demande_cr?'Compte de résultat uniquement':'Non demandée'}\n\nPièces jointes :\n${dl||'(aucune pièce cochée)'}\n\nSignataire   : ${s.dirigeant||'[DIRIGEANT]'}, ${s.qualite}\nÉtabli le    : ${today}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nÀ déposer sur : formalites.entreprises.gouv.fr\nMode expert recommandé — SIREN requis à la connexion`;S.decl_text=text;return`<h2>Récapitulatif du dossier</h2><p class="sub">Vérifiez avant de procéder au dépôt sur le Guichet unique.</p>${!S.docs.bilan?'<div class="alert red">Bilan manquant — pièce obligatoire.</div>':''}${!S.soc.siren||S.soc.siren.length!==9?'<div class="alert warn">SIREN absent ou invalide.</div>':''}${!S.ex.fin?'<div class="alert warn">Date de clôture non renseignée.</div>':''}<div class="copy-row"><span style="font-size:12px;color:#888">Récapitulatif généré</span><button class="btn" onclick="navigator.clipboard.writeText(S.decl_text)" style="font-size:12px;padding:5px 12px">Copier</button></div><div class="gen-out">${text}</div><div class="actions"><button class="btn" onclick="prev()">← Retour</button><button class="btn p" onclick="next()">Procéder au dépôt →</button></div>`;}
+
+function s5(){const issues=[];if(!S.docs.bilan)issues.push('Bilan manquant');if(!S.soc.siren||S.soc.siren.length!==9)issues.push('SIREN invalide');if(!S.ex.fin)issues.push('Date de clôture manquante');const ok=issues.length===0;function tl(n,cls,title,desc,badge,last){return`<div class="tl-item"><div class="tl-line"><div class="tl-dot ${cls}">${n}</div>${!last?'<div class="tl-connector"></div>':''}</div><div class="tl-content"><div class="tl-title">${title}</div><div class="tl-desc">${desc}</div>${badge?`<span class="tl-badge">${badge}</span>`:''}</div></div>`;}return`<h2>Dépôt en ligne — Guichet unique</h2><p class="sub">Procédure officielle depuis le 1er janvier 2025 (art. 1er loi n°2019-486).</p>${ok?'<div class="alert ok">Dossier complet — vous pouvez procéder au dépôt.</div>':'<div class="alert red">Points bloquants : '+issues.join(' / ')+'. Corrigez avant de déposer.</div>'}<div class="timeline">${tl('1','blue','Se connecter au Guichet unique','formalites.entreprises.gouv.fr — connexion avec votre compte ou création avec le SIREN.','Gratuit',false)}${tl('2','blue','Choisir "Dépôt de comptes annuels"','Dans votre tableau de bord, sélectionnez votre société. Utilisez le mode expert pour simplifier le processus.','',false)}${tl('3','blue','Uploader les documents','Bilan (PDF/XBRL), annexe, PV d\'AGO'+(S.conf.demande_cr||S.conf.demande_bilan?', déclaration de confidentialité':'')+'.','' ,false)}${tl('4','blue','Signer électroniquement','Certificat de signature électronique avancée requis (eIDAS). Prestataires : ChamberSign, Certigna, DocuSign...','Certificat qualifié',false)}${tl('5','blue','Régler les frais de greffe','Émoluments du greffe + publication BODACC. Montant précisé lors du dépôt.','Paiement CB en ligne',false)}${tl('6','green','Accusé de réception','Le greffe valide sous quelques jours. Accusé par email. Publication automatique au BODACC.','',true)}</div><div class="alert info" style="margin-top:1rem">Délai légal en ligne : <strong>2 mois</strong> à compter de la date de tenue de l'AGO (contre 1 mois pour le dépôt papier).</div><div class="actions"><button class="btn" onclick="prev()">← Retour</button><button class="btn g" onclick="window.open('https://formalites.entreprises.gouv.fr','_blank')">Ouvrir le Guichet unique ↗</button></div>`;}
+
+render();
+</script>
+</body>
+</html>
